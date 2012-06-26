@@ -1,0 +1,3 @@
+accessing
+sourceName
+    ^ self projectSpecName

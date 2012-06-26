@@ -2,7 +2,7 @@
 	"class" : {
 		 },
 	"instance" : {
-		"applyAdd:copy:merge:remove:" : "dkh 6/5/2012 19:01:24",
+		"applyAdd:copy:import:merge:remove:" : "dkh 6/25/2012 19:06",
 		"applyToList:" : "dkh 6/5/2012 19:01:24",
 		"configMethodCascadeOn:last:indent:" : "dkh 6/5/2012 19:01:24",
 		"configMethodOn:indent:" : "dkh 6/5/2012 19:01:24",

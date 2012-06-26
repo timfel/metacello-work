@@ -1,0 +1,16 @@
+{
+	"category" : "Metacello-Core-Specs",
+	"classinstvars" : [
+		 ],
+	"classtraitcomposition" : "{}",
+	"classvars" : [
+		 ],
+	"commentStamp" : "",
+	"instvars" : [
+		"projectSpecName" ],
+	"name" : "MetacelloGroupImportSpec",
+	"pools" : [
+		 ],
+	"super" : "MetacelloGroupSpec",
+	"traitcomposition" : "{}",
+	"type" : "normal" }
