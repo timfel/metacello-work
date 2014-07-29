@@ -1,12 +1,12 @@
 baselines
-baseline10beta32: spec
-  <version: '1.0-beta.32-baseline'>
+baseline10beta322: spec
+  <version: '1.0-beta.32.2-baseline'>
   spec
     for: #'common'
     do: [ 
       spec blessing: #'baseline'.
       spec repository: 'http://seaside.gemtalksystems.com/ss/metacello'.
-      spec repository: 'http://www.squeaksource.com/metacello'.
+      spec repository: 'http://smalltalkhub.com/mc/dkh/metacello/main'.
       spec
         project: 'FileTree'
           with: [ 
@@ -48,33 +48,53 @@ baseline10beta32: spec
           with: [ spec requires: #('Metacello-Core') ];
         package: 'Metacello-TestsCore'
           with: [ spec requires: #('Metacello-Core') ];
+        package: 'Metacello-TestsMCResources'
+          with: [ 
+              spec
+                postLoadDoIt: #'testResourcePostLoadDoIt';
+                includes: #('Metacello-TestsCommonMC');
+                requires: #('Metacello-Core') ];
+        package: 'Metacello-TestsMCCore'
+          with: [ 
+              spec
+                requires:
+                  #('Metacello-Core' 'Metacello-TestsCore' 'Metacello-ToolBox' 'Metacello-TestsMCResources') ];
         package: 'Metacello-TestsMC'
           with: [ 
               spec
-                postLoadDoIt: #'testsMC10beta25PostLoadDoIt';
                 requires:
-                    #('Metacello-MC' 'Metacello-TestsCore' 'Gofer Tests' 'Metacello-ToolBox') ];
+                  #('Metacello-MC' 'Gofer Tests' 'Metacello-ToolBox' 'Metacello-GitHub' 'Metacello-TestsMCResources') ];
+        package: 'Metacello-TestsMCA'
+          with: [ spec requires: #('Metacello-TestsMC') ];
+        package: 'Metacello-TestsMCB'
+          with: [ spec requires: #('Metacello-TestsMC') ];
+        package: 'Metacello-TestsCommonMC'
+          with: [ 
+              spec
+                file: 'Metacello-TestsCommonMC.common';
+                requires: 'Metacello-TestsMCResources' ];
         package: 'Metacello-TestsReference'
           with: [ spec requires: #('Metacello-Reference') ];
         package: 'Metacello-TestsTutorial'
-          with: [ spec requires: #('Metacello-Tutorial' 'Metacello-TestsMC') ];
-        package: 'OB-Metacello'
-          with: [ spec requires: #('Metacello-Platform' 'Metacello-Core' 'Metacello-ToolBox') ];
+          with: [ spec requires: #('Metacello-Tutorial' 'Metacello-TestsMCResources') ];
         yourself.
       spec
-        group: 'default'
-          with: #('Metacello-Core' 'Metacello-ToolBox' 'Metacello-GitHub');
+        group: 'default' with: #('batch' 'Metacello-ToolBox');
         group: 'batch' with: #('Metacello-Core' 'Metacello-GitHub');
         group: 'Base Configuration' with: #('Metacello-Base');
         group: 'Core' with: #('default');
         group: 'Tutorial' with: #('Metacello-Tutorial' 'Metacello-Reference');
-        group: 'UI' with: #('OB-Metacello');
-        group: 'TravisCI'
+        group: 'UI' with: #('default');
+        group: 'TravisCI_1'
           with:
-            #('Metacello-TestsCore' 'Metacello-TestsTutorial' 'Metacello-TestsMC' 'Metacello-TestsReference');
+            #('Metacello-TestsCore' 'Metacello-TestsReference' 'Metacello-TestsMCCore');
+        group: 'TravisCI_2' with: #('Metacello-TestsMCA');
+        group: 'TravisCI_3'
+          with: #('Metacello-TestsMCB' 'Metacello-TestsTutorial');
+        group: 'TravisCI' with: #('TravisCI_1' 'TravisCI_2' 'TravisCI_3');
         group: 'Tests'
           with:
-            #('default' 'Metacello-TestsCore' 'Metacello-TestsTutorial' 'Metacello-TestsMC' 'Metacello-TestsReference');
+            #('Metacello-TestsCore' 'Metacello-TestsTutorial' 'Metacello-TestsMCA' 'Metacello-TestsMCB' 'Metacello-TestsReference' 'Metacello-TestsMCCore');
         yourself ].
   spec
     for: #'squeakCommon'
@@ -84,14 +104,7 @@ baseline10beta32: spec
           with: [ 
               spec
                 className: 'ConfigurationOfHelpSystem';
-                versionString: #'1.0-baseline';
-                loads: #('Core');
-                repository: 'http://www.squeaksource.com/MetacelloRepository' ];
-        project: 'OmniBrowser'
-          with: [ 
-              spec
-                className: 'ConfigurationOfOmniBrowser';
-                versionString: #'stable';
+                versionString: '1.0-baseline';
                 loads: #('Core');
                 repository: 'http://www.squeaksource.com/MetacelloRepository' ];
         project: 'OSProcess'
@@ -99,7 +112,8 @@ baseline10beta32: spec
               spec
                 className: 'ConfigurationOfOSProcess';
                 versionString: #'stable';
-                repository: 'http://www.squeaksource.com/MetacelloRepository' ];
+                repository: 'http://www.squeaksource.com/MetacelloRepository';
+                repository: 'http://seaside.gemtalksystems.com/ss/metacello' ];
         yourself.
       spec
         package: 'Metacello-TestsPlatform'
@@ -108,11 +122,10 @@ baseline10beta32: spec
                 requires: #('Metacello-Platform');
                 file: 'Metacello-TestsPlatform.squeakCommon' ];
         package: 'Metacello-Help' with: [ spec requires: 'HelpSystem' ];
-        package: 'OB-Metacello' with: [ spec requires: #('OmniBrowser') ];
         yourself.
       spec
         group: 'Tests' with: #('Metacello-TestsPlatform');
-        group: 'TravisCI' with: #('Metacello-TestsPlatform');
+        group: 'TravisCI_1' with: #('Metacello-TestsPlatform');
         yourself ].
   spec
     for: #'pharo'
@@ -123,40 +136,73 @@ baseline10beta32: spec
               spec
                 className: 'ConfigurationOfProfStef';
                 versionString: #'stable';
-                repository: 'http://www.squeaksource.com/MetacelloRepository' ];
+                repository:
+                    'http://smalltalkhub.com/mc/PharoExtras/ProfStef/main' ];
         yourself.
       spec
         package: 'Metacello-ProfStef'
           with: [ spec requires: #('Metacello-Core' 'ProfStef' 'Metacello-ToolBox') ];
         package: 'Metacello-TestsProfStef'
           with: [ spec requires: #('Metacello-ProfStef') ];
+        package: 'Metacello-PharoCommonPlatform'
+          with: [ spec requires: #('Metacello-MC') ];
         package: 'Metacello-Platform'
-          with: [ 
-              spec
-                file: 'Metacello-Platform.pharo';
-                requires: #('OSProcess') ];
+          with: [ spec requires: #('Metacello-PharoCommonPlatform') ];
         yourself.
       spec
         group: 'Tests' with: #('Metacello-TestsProfStef');
         group: 'Tutorial' with: #('Metacello-ProfStef');
         yourself ].
   spec
-    for: #'pharo2.x'
+    for: #'pharo1.x'
     do: [ 
-      spec removeProject: 'OmniBrowser'.
       spec
         package: 'Metacello-Platform'
-        with: [ spec file: 'Metacello-Platform.pharo20' ] ].
+        with: [ spec 
+				file: 'Metacello-Platform.pharo';
+				 requires: #('OSProcess') ] ].
+  spec
+    for: #'pharo2.x'
+    do: [ 
+      spec
+        project: 'OSProcess'
+          with: [ spec repository: 'http://ss3.gemtalksystems.com/ss/MetaRepoForPharo20' ];
+        yourself.
+      spec
+        package: 'Metacello-Platform'
+          with: [ spec
+				file: 'Metacello-Platform.pharo20';
+				requires: #('OSProcess') ];
+        package: 'Metacello-TestsCommonMC'
+          with: [ spec file: 'Metacello-TestsCommonMC.pharo20' ];
+        yourself ].
+  spec
+    for: #'pharo3.x'
+    do: [ 
+      spec removeProject: 'OSProcess'.
+      spec
+        package: 'Metacello-Platform'
+          with: [ spec
+				file: 'Metacello-Platform.pharo30' ];
+        package: 'Metacello-TestsCommonMC'
+          with: [ spec file: 'Metacello-TestsCommonMC.pharo20' ];
+        yourself ].
   spec
     for: #'squeak'
-    do: [ 
-      spec yourself.
+    do: [
+      spec
+        package: 'SqueakSSL-Core'
+        with: [spec repository: 'http://www.squeaksource.com/SqueakSSL'].
+      spec
+        package: 'WebClient-Core'
+        with: [spec repository: 'http://ss3.gemstone.com/ss/WebClient'].
       spec
         package: 'Metacello-Platform'
           with: [ 
               spec
                 file: 'Metacello-Platform.squeak';
-                requires: #('OSProcess') ];
+                repository: 'http://www.hpi.uni-potsdam.de/hirschfeld/squeaksource/SwaUtilities';
+                requires: #('WebClient-Core' 'SqueakSSL-Core') ];
         yourself ].
   spec
     for: #'gemstone'
@@ -176,18 +222,9 @@ baseline10beta32: spec
                 versionString: '0.242';
                 repository:
                     'http://seaside.gemtalksystems.com/ss/MetacelloRepository' ];
-        project: 'OmniBrowser'
-          with: [ 
-              spec
-                className: 'ConfigurationOfGsOB';
-                versionString: #'stable';
-                repository:
-                    'http://seaside.gemtalksystems.com/ss/MetacelloRepository' ];
         yourself.
       spec
         package: 'Metacello-GitHub' with: [ spec requires: #('GsCore') ];
-        package: 'Metacello-MC'
-          with: [ spec preLoadDoIt: #'gemstone10beta24PreLoadDoIt' ];
         package: 'Metacello-Platform'
           with: [ 
               spec
@@ -199,9 +236,8 @@ baseline10beta32: spec
               spec
                 requires: #('Metacello-Platform');
                 file: 'Metacello-TestsPlatform.gemstone' ];
-        package: 'OB-Metacello' with: [ spec requires: #('OmniBrowser') ];
         yourself.
       spec
         group: 'Tests' with: #('Metacello-TestsPlatform');
-        group: 'TravisCI' with: #('Metacello-TestsPlatform');
+        group: 'TravisCI_1' with: #('Metacello-TestsPlatform');
         yourself ]
